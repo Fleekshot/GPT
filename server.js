@@ -1,5 +1,6 @@
 const express = require('express');
 const http = require('http');
+const https = require('https');
 const path = require('path');
 const { Server } = require('socket.io');
 
@@ -10,6 +11,24 @@ const io = new Server(server);
 // Store drawing and chat history so new clients receive past activity
 const drawingHistory = [];
 const chatHistory = [];
+
+function fetchImageAsDataURL(url) {
+  return new Promise((resolve, reject) => {
+    const mod = url.startsWith('https') ? https : http;
+    mod.get(url, (res) => {
+      if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+        return resolve(fetchImageAsDataURL(res.headers.location));
+      }
+      const chunks = [];
+      res.on('data', (c) => chunks.push(c));
+      res.on('end', () => {
+        const buf = Buffer.concat(chunks);
+        const type = res.headers['content-type'] || 'image/png';
+        resolve(`data:${type};base64,${buf.toString('base64')}`);
+      });
+    }).on('error', reject);
+  });
+}
 
 const port = process.env.PORT || 3000;
 
@@ -26,8 +45,14 @@ io.on('connection', (socket) => {
     socket.broadcast.emit('drawing', data);
   });
 
-  socket.on('chat message', (msg) => {
-    // msg can be text or image payload
+  socket.on('chat message', async (msg) => {
+    if (msg.type === 'image' && /^https?:/.test(msg.src)) {
+      try {
+        msg.src = await fetchImageAsDataURL(msg.src);
+      } catch (err) {
+        console.error('Failed to fetch image:', err);
+      }
+    }
     chatHistory.push(msg);
     io.emit('chat message', msg);
   });
