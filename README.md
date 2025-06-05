@@ -6,6 +6,7 @@ Features:
 - Color picker and medium-sized eraser for the drawing board
 - Chat messages synchronized to everyone
 - Previous drawings/messages are sent to new participants
+- Admin `CMD` panel for clearing chat/board and posting announcements
 
 ## Running in GitHub Codespaces
 1. Open this repository in GitHub Codespaces.
@@ -26,3 +27,11 @@ npm install
 npm start
 ```
 Then open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Admin Commands
+
+Click the **CMD** button in the top-right corner and enter password `2292` to open the command panel. Supported commands:
+
+- `clear chat` – remove all chat history for everyone
+- `clear board` – wipe the drawing canvas for everyone
+- `announce {message} {seconds}` – display a message in the announcements area for the given time in seconds. Use `0` to keep it visible permanently.

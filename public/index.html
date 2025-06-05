@@ -6,11 +6,26 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div id="cmd-container">
+    <button id="cmdBtn">CMD</button>
+  </div>
   <div id="tools">
     <input type="color" id="colorPicker" />
     <button id="eraser">Eraser</button>
   </div>
-  <canvas id="board" width="800" height="600"></canvas>
+  <div id="commandPanel">
+    <form id="cmdForm" action="">
+      <input id="cmdInput" autocomplete="off" placeholder="Enter command" />
+      <button>Run</button>
+    </form>
+  </div>
+  <div id="content">
+    <div id="announcements">
+      <h2>Announcements</h2>
+      <div id="announcementMessages"></div>
+    </div>
+    <canvas id="board" width="800" height="600"></canvas>
+  </div>
   <div id="chat">
     <ul id="messages"></ul>
     <form id="form" action="">

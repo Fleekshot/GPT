@@ -3,9 +3,52 @@ body {
   flex-direction: column;
   align-items: center;
   font-family: Arial, sans-serif;
+  position: relative;
 }
 
 #tools {
+  margin-bottom: 5px;
+}
+
+#cmd-container {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+#cmdBtn {
+  padding: 4px 8px;
+}
+
+#commandPanel {
+  position: fixed;
+  top: 40px;
+  right: 10px;
+  background: white;
+  border: 1px solid #333;
+  padding: 5px;
+  display: none;
+  z-index: 10;
+}
+
+#content {
+  display: flex;
+  align-items: flex-start;
+}
+
+#announcements {
+  width: 200px;
+  margin-right: 10px;
+}
+
+#announcementMessages {
+  border: 1px solid #333;
+  min-height: 100px;
+  padding: 5px;
+}
+
+.announcement {
+  font-size: 1.2em;
   margin-bottom: 5px;
 }
 

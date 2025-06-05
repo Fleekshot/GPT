@@ -31,6 +31,20 @@ io.on('connection', (socket) => {
     io.emit('chat message', msg);
   });
 
+  socket.on('clear chat', () => {
+    chatHistory.length = 0;
+    io.emit('clear chat');
+  });
+
+  socket.on('clear board', () => {
+    drawingHistory.length = 0;
+    io.emit('clear board');
+  });
+
+  socket.on('announce', (data) => {
+    io.emit('announce', data);
+  });
+
   socket.on('disconnect', () => {
     console.log('user disconnected');
   });
