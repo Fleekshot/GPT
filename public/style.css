@@ -32,13 +32,16 @@ body {
 }
 
 #content {
-  display: flex;
-  align-items: flex-start;
+  position: relative;
+  width: 800px; /* same as canvas width so it centers */
 }
 
 #announcements {
-  width: 200px;
+  position: absolute;
+  right: 100%;
   margin-right: 10px;
+  width: 200px;
+  top: 0;
 }
 
 #announcementMessages {
