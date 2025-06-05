@@ -33,7 +33,7 @@ body {
 
 #content {
   position: relative;
-  width: 800px; /* same as canvas width so it centers */
+  width: 1200px; /* same as canvas width so it centers */
 }
 
 #announcements {
@@ -61,7 +61,7 @@ body {
 }
 
 #chat {
-  width: 800px;
+  width: 1200px;
 }
 
 #messages {

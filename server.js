@@ -27,6 +27,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('chat message', (msg) => {
+    // msg can be text or image payload
     chatHistory.push(msg);
     io.emit('chat message', msg);
   });

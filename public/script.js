@@ -15,6 +15,8 @@ const announcementMessages = document.getElementById('announcementMessages');
 const form = document.getElementById('form');
 const input = document.getElementById('input');
 const messages = document.getElementById('messages');
+const imgBtn = document.getElementById('imgBtn');
+const imgFile = document.getElementById('imgFile');
 
 colorPicker.addEventListener('input', (e) => {
   currentColor = e.target.value;
@@ -24,6 +26,26 @@ colorPicker.addEventListener('input', (e) => {
 eraserBtn.addEventListener('click', () => {
   currentColor = '#FFFFFF';
   currentWidth = 20; // medium size eraser
+});
+
+imgBtn.addEventListener('click', () => {
+  const url = prompt('Enter image URL or leave blank to upload file');
+  if (url) {
+    sendImage(url);
+  } else {
+    imgFile.click();
+  }
+});
+
+imgFile.addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    sendImage(reader.result);
+  };
+  reader.readAsDataURL(file);
+  imgFile.value = '';
 });
 
 cmdBtn.addEventListener('click', () => {
@@ -129,15 +151,30 @@ socket.on('announce', (data) => {
 
 form.addEventListener('submit', (e) => {
   e.preventDefault();
-  if (input.value) {
-    socket.emit('chat message', input.value);
+  const text = input.value.trim();
+  if (text) {
+    socket.emit('chat message', { type: 'text', content: text });
     input.value = '';
   }
 });
 
+function sendImage(src) {
+  socket.emit('chat message', { type: 'image', src });
+}
+
 function addMessage(msg) {
   const item = document.createElement('li');
-  item.textContent = msg;
+  if (typeof msg === 'string') {
+    item.textContent = msg;
+  } else if (msg.type === 'text') {
+    item.textContent = msg.content;
+  } else if (msg.type === 'image') {
+    const img = document.createElement('img');
+    img.src = msg.src;
+    img.alt = 'uploaded image';
+    img.style.maxWidth = '200px';
+    item.appendChild(img);
+  }
   messages.appendChild(item);
   messages.scrollTop = messages.scrollHeight;
 }

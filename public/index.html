@@ -24,12 +24,15 @@
       <h2>Announcements</h2>
       <div id="announcementMessages"></div>
     </div>
-    <canvas id="board" width="800" height="600"></canvas>
+    <canvas id="board" width="1200" height="600"></canvas>
   </div>
   <div id="chat">
     <ul id="messages"></ul>
     <form id="form" action="">
-      <input id="input" autocomplete="off" /><button>Send</button>
+      <input id="input" autocomplete="off" />
+      <button>Send</button>
+      <button type="button" id="imgBtn">IMG</button>
+      <input type="file" id="imgFile" accept="image/*" style="display:none" />
     </form>
   </div>
   <script src="/socket.io/socket.io.js"></script>
