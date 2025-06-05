@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Collaborative Drawing Board</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="board" width="800" height="600"></canvas>
+  <div id="chat">
+    <ul id="messages"></ul>
+    <form id="form" action="">
+      <input id="input" autocomplete="off" /><button>Send</button>
+    </form>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
