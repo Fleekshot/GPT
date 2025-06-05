@@ -1,0 +1,82 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  position: relative;
+}
+
+#tools {
+  margin-bottom: 5px;
+}
+
+#cmd-container {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+
+#cmdBtn {
+  padding: 4px 8px;
+}
+
+#commandPanel {
+  position: fixed;
+  top: 40px;
+  right: 10px;
+  background: white;
+  border: 1px solid #333;
+  padding: 5px;
+  display: none;
+  z-index: 10;
+}
+
+#content {
+  position: relative;
+  width: 1200px; /* same as canvas width so it centers */
+}
+
+#announcements {
+  position: absolute;
+  right: 100%;
+  margin-right: 10px;
+  width: 200px;
+  top: 0;
+}
+
+#announcementMessages {
+  border: 1px solid #333;
+  min-height: 100px;
+  padding: 5px;
+}
+
+.announcement {
+  font-size: 1.2em;
+  margin-bottom: 5px;
+}
+
+#board {
+  border: 1px solid #333;
+  margin-bottom: 10px;
+}
+
+#chat {
+  width: 1200px;
+}
+
+#messages {
+  list-style-type: none;
+  padding: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px solid #333;
+  margin-bottom: 5px;
+}
+
+#form {
+  display: flex;
+}
+
+#input {
+  flex: 1;
+}
