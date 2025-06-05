@@ -2,6 +2,18 @@ const socket = io();
 const canvas = document.getElementById('board');
 const ctx = canvas.getContext('2d');
 let drawing = false;
+let currentColor = '#000000';
+
+const colorPicker = document.getElementById('colorPicker');
+const eraserBtn = document.getElementById('eraser');
+
+colorPicker.addEventListener('input', (e) => {
+  currentColor = e.target.value;
+});
+
+eraserBtn.addEventListener('click', () => {
+  currentColor = '#FFFFFF';
+});
 
 canvas.addEventListener('mousedown', startPosition);
 canvas.addEventListener('mouseup', endPosition);
@@ -21,6 +33,7 @@ function draw(e) {
   if (!drawing) return;
   ctx.lineWidth = 2;
   ctx.lineCap = 'round';
+  ctx.strokeStyle = currentColor;
   const rect = canvas.getBoundingClientRect();
   const x = e.clientX - rect.left;
   const y = e.clientY - rect.top;
@@ -28,12 +41,13 @@ function draw(e) {
   ctx.stroke();
   ctx.beginPath();
   ctx.moveTo(x, y);
-  socket.emit('drawing', { x, y });
+  socket.emit('drawing', { x, y, color: currentColor });
 }
 
 socket.on('drawing', (data) => {
   ctx.lineWidth = 2;
   ctx.lineCap = 'round';
+  ctx.strokeStyle = data.color;
   ctx.lineTo(data.x, data.y);
   ctx.stroke();
   ctx.beginPath();
@@ -52,9 +66,27 @@ form.addEventListener('submit', (e) => {
   }
 });
 
-socket.on('chat message', (msg) => {
+function addMessage(msg) {
   const item = document.createElement('li');
   item.textContent = msg;
   messages.appendChild(item);
-  window.scrollTo(0, document.body.scrollHeight);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+socket.on('chat message', (msg) => {
+  addMessage(msg);
+});
+
+socket.on('history', ({ drawings, messages: chatMsgs }) => {
+  drawings.forEach((d) => {
+    ctx.lineWidth = 2;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = d.color;
+    ctx.lineTo(d.x, d.y);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(d.x, d.y);
+  });
+
+  chatMsgs.forEach(addMessage);
 });

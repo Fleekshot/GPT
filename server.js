@@ -7,6 +7,10 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
+// Store drawing and chat history so new clients receive past activity
+const drawingHistory = [];
+const chatHistory = [];
+
 const port = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -14,11 +18,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 io.on('connection', (socket) => {
   console.log('a user connected');
 
+  // Send existing history to the newly connected client
+  socket.emit('history', { drawings: drawingHistory, messages: chatHistory });
+
   socket.on('drawing', (data) => {
+    drawingHistory.push(data);
     socket.broadcast.emit('drawing', data);
   });
 
   socket.on('chat message', (msg) => {
+    chatHistory.push(msg);
     io.emit('chat message', msg);
   });
 

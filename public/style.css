@@ -5,6 +5,10 @@ body {
   font-family: Arial, sans-serif;
 }
 
+#tools {
+  margin-bottom: 5px;
+}
+
 #board {
   border: 1px solid #333;
   margin-bottom: 10px;
