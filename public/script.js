@@ -3,16 +3,19 @@ const canvas = document.getElementById('board');
 const ctx = canvas.getContext('2d');
 let drawing = false;
 let currentColor = '#000000';
+let currentWidth = 2;
 
 const colorPicker = document.getElementById('colorPicker');
 const eraserBtn = document.getElementById('eraser');
 
 colorPicker.addEventListener('input', (e) => {
   currentColor = e.target.value;
+  currentWidth = 2; // normal brush size when picking a color
 });
 
 eraserBtn.addEventListener('click', () => {
   currentColor = '#FFFFFF';
+  currentWidth = 20; // medium size eraser
 });
 
 canvas.addEventListener('mousedown', startPosition);
@@ -31,7 +34,7 @@ function endPosition() {
 
 function draw(e) {
   if (!drawing) return;
-  ctx.lineWidth = 2;
+  ctx.lineWidth = currentWidth;
   ctx.lineCap = 'round';
   ctx.strokeStyle = currentColor;
   const rect = canvas.getBoundingClientRect();
@@ -41,11 +44,11 @@ function draw(e) {
   ctx.stroke();
   ctx.beginPath();
   ctx.moveTo(x, y);
-  socket.emit('drawing', { x, y, color: currentColor });
+  socket.emit('drawing', { x, y, color: currentColor, width: currentWidth });
 }
 
 socket.on('drawing', (data) => {
-  ctx.lineWidth = 2;
+  ctx.lineWidth = data.width || 2;
   ctx.lineCap = 'round';
   ctx.strokeStyle = data.color;
   ctx.lineTo(data.x, data.y);
@@ -79,7 +82,7 @@ socket.on('chat message', (msg) => {
 
 socket.on('history', ({ drawings, messages: chatMsgs }) => {
   drawings.forEach((d) => {
-    ctx.lineWidth = 2;
+    ctx.lineWidth = d.width || 2;
     ctx.lineCap = 'round';
     ctx.strokeStyle = d.color;
     ctx.lineTo(d.x, d.y);
