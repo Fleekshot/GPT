@@ -40,14 +40,24 @@ canvas.addEventListener('mousedown', startPosition);
 canvas.addEventListener('mouseup', endPosition);
 canvas.addEventListener('mousemove', draw);
 
+function getCoords(e) {
+  const rect = canvas.getBoundingClientRect();
+  return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+}
+
 function startPosition(e) {
   drawing = true;
-  draw(e);
+  const { x, y } = getCoords(e);
+  ctx.lineWidth = currentWidth;
+  ctx.lineCap = 'round';
+  ctx.strokeStyle = currentColor;
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  socket.emit('drawing', { x, y, color: currentColor, width: currentWidth, type: 'start' });
 }
 
 function endPosition() {
   drawing = false;
-  ctx.beginPath();
 }
 
 function draw(e) {
@@ -55,13 +65,9 @@ function draw(e) {
   ctx.lineWidth = currentWidth;
   ctx.lineCap = 'round';
   ctx.strokeStyle = currentColor;
-  const rect = canvas.getBoundingClientRect();
-  const x = e.clientX - rect.left;
-  const y = e.clientY - rect.top;
+  const { x, y } = getCoords(e);
   ctx.lineTo(x, y);
   ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(x, y);
   socket.emit('drawing', { x, y, color: currentColor, width: currentWidth });
 }
 
@@ -89,10 +95,13 @@ socket.on('drawing', (data) => {
   ctx.lineWidth = data.width || 2;
   ctx.lineCap = 'round';
   ctx.strokeStyle = data.color;
-  ctx.lineTo(data.x, data.y);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(data.x, data.y);
+  if (data.type === 'start') {
+    ctx.beginPath();
+    ctx.moveTo(data.x, data.y);
+  } else {
+    ctx.lineTo(data.x, data.y);
+    ctx.stroke();
+  }
 });
 
 socket.on('clear chat', () => {
@@ -142,10 +151,13 @@ socket.on('history', ({ drawings, messages: chatMsgs }) => {
     ctx.lineWidth = d.width || 2;
     ctx.lineCap = 'round';
     ctx.strokeStyle = d.color;
-    ctx.lineTo(d.x, d.y);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(d.x, d.y);
+    if (d.type === 'start') {
+      ctx.beginPath();
+      ctx.moveTo(d.x, d.y);
+    } else {
+      ctx.lineTo(d.x, d.y);
+      ctx.stroke();
+    }
   });
 
   chatMsgs.forEach(addMessage);
