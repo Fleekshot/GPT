@@ -26,7 +26,7 @@ io.on('connection', (socket) => {
   socket.emit('history', { drawings: drawingHistory, messages: chatHistory });
 
   socket.on('drawing', (data) => {
-    console.log(`Drawing data from ${ip}`);
+    console.log(`Drawing from ${ip}`); // don't log raw data
     drawingHistory.push(data);
     socket.broadcast.emit('drawing', data);
   });
