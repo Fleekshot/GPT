@@ -5,9 +5,7 @@ This repo provides a simple real-time drawing board and chat application using N
 Features:
 - Color picker and medium-sized eraser for the drawing board
 - Chat messages synchronized to everyone
-- Image uploads via the **IMG** button (URL or local file). Remote URLs are
-  fetched by the server and converted to data URLs so they display reliably for
-  everyone
+- Image uploads via the **IMG** button (local files only)
 - Previous drawings/messages are sent to new participants
 - Admin `CMD` panel for clearing chat/board and posting announcements
 - Single-click dots display properly for all participants

@@ -29,12 +29,7 @@ eraserBtn.addEventListener('click', () => {
 });
 
 imgBtn.addEventListener('click', () => {
-  const url = prompt('Enter image URL or leave blank to upload file');
-  if (url) {
-    sendImage(url);
-  } else {
-    imgFile.click();
-  }
+  imgFile.click();
 });
 
 imgFile.addEventListener('change', (e) => {
