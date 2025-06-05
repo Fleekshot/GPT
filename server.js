@@ -16,17 +16,23 @@ const port = process.env.PORT || 3000;
 app.use(express.static(path.join(__dirname, 'public')));
 
 io.on('connection', (socket) => {
-  console.log('a user connected');
+  const ip =
+    (socket.handshake.headers['x-forwarded-for'] || '')
+      .split(',')[0]
+      .trim() || socket.handshake.address;
+  console.log(`User connected from ${ip}`);
 
   // Send existing history to the newly connected client
   socket.emit('history', { drawings: drawingHistory, messages: chatHistory });
 
   socket.on('drawing', (data) => {
+    console.log(`Drawing data from ${ip}`);
     drawingHistory.push(data);
     socket.broadcast.emit('drawing', data);
   });
 
   socket.on('chat message', (msg) => {
+    console.log(`Chat message from ${ip}:`, msg);
     chatHistory.push(msg);
     io.emit('chat message', msg);
   });
@@ -46,7 +52,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on('disconnect', () => {
-    console.log('user disconnected');
+    console.log(`User disconnected: ${ip}`);
   });
 });
 

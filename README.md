@@ -9,6 +9,7 @@ Features:
 - Previous drawings/messages are sent to new participants
 - Admin `CMD` panel for clearing chat/board and posting announcements
 - Single-click dots display properly for all participants
+- Server logs include IP addresses for connections and messages
 
 ## Running in GitHub Codespaces
 1. Open this repository in GitHub Codespaces.
